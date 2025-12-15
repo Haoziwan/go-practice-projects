@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>URL Shortener</title>
+    <meta
+      name="description"
+      content="Shorten your long URLs into compact, shareable links"
+    />
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="card">
+        <h1>URL Shortener</h1>
+        <p class="subtitle">
+          Transform your long URLs into short, shareable links
+        </p>
+
+        <form action="/shorten" method="POST" class="url-form">
+          <div class="input-group">
+            <input
+              type="text"
+              name="url"
+              id="url-input"
+              placeholder="Enter your long URL here..."
+              required
+              autocomplete="off"
+            />
+            <button type="submit" class="shorten-btn">
+              <span>Shorten</span>
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path
+                  d="M4 10h12m0 0l-4-4m4 4l-4 4"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </body>
+</html>

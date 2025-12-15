@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shortened URL - URL Shortener</title>
+    <meta name="description" content="Your shortened URL is ready">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="card result-card">
+            <div class="success-icon">✓</div>
+            <h1>Your Short URL is Ready!</h1>
+            
+            <div class="url-display">
+                <label>Original URL:</label>
+                <div class="url-box original-url">{{.LongURL}}</div>
+            </div>
+            
+            <div class="url-display">
+                <label>Shortened URL:</label>
+                <div class="url-box short-url">
+                    <a href="{{.ShortURL}}" target="_blank" id="short-url">{{.ShortURL}}</a>
+                </div>
+                <button class="copy-btn" onclick="copyURL()">
+                    <span id="copy-text">Copy</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                        <rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="2"/>
+                        <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="actions">
+                <a href="/" class="btn-secondary">Shorten Another URL</a>
+                <a href="{{.ShortURL}}" class="btn-primary" target="_blank">Test Short URL</a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function copyURL() {
+            const urlText = document.getElementById('short-url').textContent;
+            const copyText = document.getElementById('copy-text');
+            
+            navigator.clipboard.writeText(urlText).then(() => {
+                copyText.textContent = 'Copied!';
+                setTimeout(() => {
+                    copyText.textContent = 'Copy';
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+            });
+        }
+    </script>
+</body>
+</html>
