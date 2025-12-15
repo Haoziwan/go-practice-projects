@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>并发下载器</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>⚡ 并发下载器</h1>
+        <p class="subtitle">高速多线程文件下载工具</p>
+      </div>
+
+      <div class="card">
+        <div class="form-group">
+          <label for="url">下载链接</label>
+          <input
+            type="text"
+            id="url"
+            placeholder="https://example.com/file.zip"
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="filename">保存文件名</label>
+          <input
+            type="text"
+            id="filename"
+            placeholder="example.zip"
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="workers"
+            >并发线程数: <span id="workers-value">4</span></label
+          >
+          <input
+            type="range"
+            id="workers"
+            min="1"
+            max="16"
+            value="4"
+            class="slider"
+          />
+        </div>
+
+        <button id="download-btn" class="btn-primary">
+          <span class="btn-icon">⬇</span>
+          开始下载
+        </button>
+      </div>
+
+      <div class="card progress-card" id="progress-card" style="display: none">
+        <div class="progress-header">
+          <h3>下载进度</h3>
+          <span class="status" id="status">准备中...</span>
+        </div>
+
+        <div class="progress-bar-container">
+          <div class="progress-bar" id="progress-bar">
+            <span class="progress-text" id="progress-text">0%</span>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-label">下载速度</div>
+            <div class="stat-value" id="speed">0 MB/s</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">已下载</div>
+            <div class="stat-value" id="downloaded">0 MB</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">文件大小</div>
+            <div class="stat-value" id="total">0 MB</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">剩余时间</div>
+            <div class="stat-value" id="remaining">--:--</div>
+          </div>
+        </div>
+
+        <button id="cancel-btn" class="btn-secondary">取消下载</button>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

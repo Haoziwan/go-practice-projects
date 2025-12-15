@@ -1,0 +1,22 @@
+{
+  "$schema": "https://wails.io/schemas/config.v2.json",
+  "name": "proj3-concurrent-downloader",
+  "outputfilename": "downloader",
+  "frontend:install": "",
+  "frontend:build": "",
+  "frontend:dev:watcher": "",
+  "frontend:dev:serverUrl": "",
+  "author": {
+    "name": "",
+    "email": ""
+  },
+  "info": {
+    "companyName": "",
+    "productName": "并发下载器",
+    "productVersion": "1.0.0",
+    "copyright": "",
+    "comments": "高性能多线程文件下载工具"
+  },
+  "wailsjsdir": "./frontend",
+  "version": "2"
+}

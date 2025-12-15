@@ -27,7 +27,27 @@ type Downloader struct {
 }
 
 func NewDownloader(url, outputPath string, numWorkers int) (*Downloader, error) {
-	resp, err := http.Head(url)
+	// Create HTTP client with better configuration
+	client := &http.Client{
+		Timeout: 60 * time.Second,
+		Transport: &http.Transport{
+			MaxIdleConns:        100,
+			MaxIdleConnsPerHost: 10,
+			IdleConnTimeout:     90 * time.Second,
+			DisableKeepAlives:   false,
+		},
+	}
+
+	// Create request with proper headers
+	req, err := http.NewRequest("HEAD", url, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create request: %w", err)
+	}
+
+	req.Header.Set("User-Agent", "Concurrent-Downloader/1.0")
+	req.Header.Set("Accept", "*/*")
+
+	resp, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get file info: %w", err)
 	}
@@ -137,9 +157,20 @@ func (d *Downloader) downloadChunk(chunk DownloadChunk, tempDir string, wg *sync
 
 	rangeHeader := fmt.Sprintf("bytes=%d-%d", chunk.Start, chunk.End)
 	req.Header.Set("Range", rangeHeader)
+	req.Header.Set("User-Agent", "Concurrent-Downloader/1.0")
+	req.Header.Set("Accept", "*/*")
+	req.Header.Set("Connection", "keep-alive")
 
 	client := &http.Client{
 		Timeout: 30 * time.Minute,
+		Transport: &http.Transport{
+			MaxIdleConns:          100,
+			MaxIdleConnsPerHost:   10,
+			IdleConnTimeout:       90 * time.Second,
+			DisableKeepAlives:     false,
+			DisableCompression:    true,
+			ResponseHeaderTimeout: 60 * time.Second,
+		},
 	}
 
 	resp, err := client.Do(req)

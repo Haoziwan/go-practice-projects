@@ -1,46 +1,41 @@
 package main
 
 import (
-	"flag"
-	"fmt"
-	"os"
-	"path/filepath"
+	"embed"
+	"log"
+
+	"github.com/wailsapp/wails/v2"
+	"github.com/wailsapp/wails/v2/pkg/options"
+	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
+	"github.com/wailsapp/wails/v2/pkg/options/windows"
 )
 
+//go:embed frontend
+var assets embed.FS
+
 func main() {
-	url := flag.String("url", "", "URL of the file to download")
-	output := flag.String("output", "", "Output file path (default: filename from URL)")
-	workers := flag.Int("workers", 4, "Number of concurrent workers")
+	app := NewApp()
 
-	flag.Parse()
+	err := wails.Run(&options.App{
+		Title:  "并发下载器",
+		Width:  700,
+		Height: 650,
+		AssetServer: &assetserver.Options{
+			Assets: assets,
+		},
+		BackgroundColour: &options.RGBA{R: 255, G: 255, B: 255, A: 255},
+		OnStartup:        app.startup,
+		Bind: []interface{}{
+			app,
+		},
+		Windows: &windows.Options{
+			WebviewIsTransparent: false,
+			WindowIsTranslucent:  false,
+			DisableWindowIcon:    false,
+		},
+	})
 
-	if *url == "" {
-		fmt.Println("Error: URL is required")
-		flag.Usage()
-		os.Exit(1)
-	}
-
-	// Determine output filename
-	outputPath := *output
-	if outputPath == "" {
-		outputPath = filepath.Base(*url)
-		if outputPath == "/" || outputPath == "." {
-			outputPath = "downloaded_file"
-		}
-	}
-
-	// Create downloader
-	downloader, err := NewDownloader(*url, outputPath, *workers)
 	if err != nil {
-		fmt.Printf("Error creating downloader: %v\n", err)
-		os.Exit(1)
+		log.Fatal(err)
 	}
-
-	// Start download
-	if err := downloader.Download(); err != nil {
-		fmt.Printf("\nError: %v\n", err)
-		os.Exit(1)
-	}
-
-	fmt.Printf("File saved to: %s\n", outputPath)
 }
